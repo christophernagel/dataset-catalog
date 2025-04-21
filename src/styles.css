@@ -229,17 +229,18 @@ body .hdc-dataset-catalog .hdc-search-input::placeholder,
 .hdc-active-filters-bar {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 20; /* Increase z-index to ensure it stays above section headers */
   background-color: white;
-  padding: 12px 0 12px; /* Match top padding with filter header */
-  margin: 0 16px;
+  padding: 12px 0 12px;
+  margin: 0;
   border-bottom: 1px solid #e5e7eb;
   display: flex;
   align-items: center;
   gap: 1rem;
   margin-bottom: 1rem;
-  width: calc(100% - 32px);
+  width: 100%; /* Make it full width */
   box-sizing: border-box;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); /* Optional: add subtle shadow */
 }
 
 .hdc-active-filters-label {
@@ -353,8 +354,11 @@ body .hdc-dataset-catalog .hdc-search-input::placeholder,
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 16px;
+  padding: 8px 16px;
+  margin-top: 8px; /* Add space between filters bar and view controls */
   margin-bottom: 16px;
+  background-color: #f9fafb; /* Optional: light background to distinguish from other elements */
+  border-radius: 4px;
 }
 
 .hdc-results-info {
@@ -419,11 +423,6 @@ body .hdc-dataset-catalog .hdc-search-input::placeholder,
 /* ===========================================================
    Dataset Grid and Cards
 =========================================================== */
-
-.dataset-category-section {
-  margin-bottom: 2rem;
-}
-
 .category-header {
   font-size: 1.5rem;
   font-weight: 600;
@@ -433,18 +432,17 @@ body .hdc-dataset-catalog .hdc-search-input::placeholder,
   border-bottom: 2px solid #e5e7eb;
 }
 
-/* Category section styling inspired by McMaster-Carr */
+/* Category section spacing */
 .dataset-category-section {
-  margin-bottom: 30px;
+  margin-bottom: 60px;
   width: 100%;
 }
 
 .dataset-category-section:not(:first-child) {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .category-header {
-  color: #034f29; /* Dark green color for headers */
   font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: 1.2rem;
@@ -490,11 +488,6 @@ body .hdc-dataset-catalog .hdc-search-input::placeholder,
   }
 }
 
-/* Add hover effect between categories */
-.dataset-category-section:hover .category-header {
-  color: #026530; /* Slightly lighter green on hover */
-}
-
 /* Color codes for community action areas - used as accents in headers */
 .category-header[data-area="Promoting Healthy Child Development"] {
   border-left: 5px solid #ff6b6b;
@@ -535,7 +528,7 @@ body .hdc-dataset-catalog .hdc-search-input::placeholder,
 .grid-view .datasets-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
+  gap: 24px 20px;
   padding: 0 16px;
 }
 
@@ -557,7 +550,7 @@ body .hdc-dataset-catalog .hdc-search-input::placeholder,
 .detail-view .datasets-detail {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 8px;
   padding: 0 16px;
 }
 
