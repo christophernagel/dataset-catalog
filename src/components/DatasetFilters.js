@@ -1,9 +1,37 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
 
-// Updated Filter Structure based on new requirements
 const filterStructure = {
   "Community Action Areas": {
+    options: [
+      "Promoting Healthy Child Development",
+      "Youth Development and Civic Engagement",
+      "Creating Protective Environments",
+      "Strengthening Economic Supports for Children and Families",
+      "Access to Safe and Stable Housing",
+      "Demographic Data",
+    ],
+    order: 1,
+    tooltip: "Filter by ACT Community Action Areas",
+  },
+  Source: {
+    options: [
+      "PolicyMap",
+      "ACS and Census Data",
+      "California Department of Social Services",
+      "California Department of Education",
+      "CAASPP Research Files",
+      "CA Open Data",
+      "CalEnviroScreen 2.0",
+      "2023 Kids Count Data Book",
+      "California Current Employment Statistics",
+      "Local Area Unemployment Statistics CA",
+      "U.S. Household Pulse Survey",
+    ],
+    order: 2,
+    tooltip: "Filter by the source or provider of the dataset",
+  },
+  Categories: {
     options: [
       "Medical Records",
       "Community",
@@ -11,50 +39,23 @@ const filterStructure = {
       "Clinical Trials",
       "Public Health",
     ],
-    order: 1,
-    tooltip: "Filter by community action areas",
+    order: 3,
+    tooltip: "Filter by category",
   },
   "Data Type": {
     options: ["KML Collection", "CSV Collection"],
-    order: 2,
-    tooltip: "Filter by data format type",
-  },
-  Source: {
-    options: [
-      "tomdilts",
-      "University of Tennessee",
-      "US Census Bureau",
-      "California Department of Forestry and Fire Protection",
-      "NOAA",
-      "UNESCO",
-    ],
-    order: 3,
-    tooltip: "Filter by the source or provider of the dataset",
-  },
-  Tags: {
-    options: [
-      "forest",
-      "tree",
-      "mortality",
-      "Lake Tahoe",
-      "center",
-      "population",
-      "counties",
-      "demographics",
-      "wildfire",
-      "boundaries",
-      "precipitation",
-      "heritage",
-      "landmarks",
-    ],
     order: 4,
-    tooltip: "Filter by specific tags or keywords",
+    tooltip: "Filter by data format type",
   },
 };
 
 // Mapping configuration for filter categories to dataset properties
 const filterMappings = {
   "Community Action Areas": {
+    field: "communityActionArea",
+    // Direct comparison
+  },
+  Categories: {
     field: "type",
     // Direct comparison
   },
@@ -66,9 +67,9 @@ const filterMappings = {
     field: "source",
     // Direct comparison
   },
-  Tags: {
-    field: "tags",
-    isArray: true,
+  "Data Topic": {
+    field: "dataTopic",
+    // Direct comparison
   },
 };
 

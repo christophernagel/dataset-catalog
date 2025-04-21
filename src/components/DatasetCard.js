@@ -1,26 +1,29 @@
 import React from "react";
 
 // Color coding for Community Action Areas
-const areaColors = {
-  "Medical Records": "#4682B4", // Steel Blue
-  Community: "#228B22", // Forest Green
-  "Educational Records": "#9370DB", // Medium Purple
-  "Clinical Trials": "#A52A2A", // Brown
-  "Public Health": "#FF8C00", // Dark Orange
+const communityActionAreaColors = {
+  "Promoting Healthy Child Development": "#FF6B6B", // Red
+  "Youth Development and Civic Engagement": "#4ECDC4", // Teal
+  "Creating Protective Environments": "#45B7D1", // Blue
+  "Strengthening Economic Supports for Children and Families": "#98D85B", // Green
+  "Access to Safe and Stable Housing": "#FFD166", // Yellow
+  "Demographic Data": "#6A0572", // Purple
 };
 
 const DatasetCard = ({
   name,
   description,
   type,
+  communityActionArea,
+  dataTopic,
   dataFormat,
   source,
   dateUpdated,
   dateCreated,
   pageUrl,
 }) => {
-  // Determine the appropriate color for the type
-  const color = areaColors[type] || "#808080";
+  // Get the color for community action area if available
+  const areaColor = communityActionAreaColors[communityActionArea] || "#808080";
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" || e.key === " ") {
@@ -40,14 +43,14 @@ const DatasetCard = ({
       onKeyDown={handleKeyDown}
     >
       <div className="hdc-dataset-content">
-        {/* Type indicator with color coding */}
-        <div className="hdc-type-indicator">
+        {/* Community Action Area indicator */}
+        <div className="hdc-community-action-area">
           <span
-            className="hdc-type-dot"
-            style={{ backgroundColor: color }}
+            className="hdc-area-dot"
+            style={{ backgroundColor: areaColor }}
             aria-hidden="true"
           ></span>
-          <span className="hdc-type-label">{type}</span>
+          <span className="hdc-area-label">{communityActionArea}</span>
         </div>
 
         {/* Title as a hyperlink */}
@@ -68,6 +71,13 @@ const DatasetCard = ({
 
         {/* Dataset attributes */}
         <div className="hdc-dataset-attributes">
+          {dataTopic && (
+            <div className="hdc-attribute">
+              <span className="hdc-attribute-label">Topic:</span>
+              <span className="hdc-attribute-value">{dataTopic}</span>
+            </div>
+          )}
+
           {source && (
             <div className="hdc-attribute">
               <span className="hdc-attribute-label">Source:</span>
