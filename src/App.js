@@ -12,9 +12,11 @@ function App() {
           sources
         </p>
       </header>
-      <main className="app-main">
+
+      <main id="main-content" className="app-main">
         <DatasetCatalog />
       </main>
+
       <footer className="app-footer">
         <p>
           © 2025 Healthcare Data Repository. All data is for research purposes

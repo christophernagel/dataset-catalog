@@ -1,155 +1,115 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
 
-// Filter Structure Configuration
+// Updated Filter Structure based on new requirements
 const filterStructure = {
-  "Filter Group 1": {
-    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
+  "Community Action Areas": {
+    options: [
+      "Medical Records",
+      "Community",
+      "Educational Records",
+      "Clinical Trials",
+      "Public Health",
+    ],
     order: 1,
-    tooltip: "Description of filter group 1 options",
+    tooltip: "Filter by community action areas",
   },
-  "Filter Group 2": {
-    options: ["Option 1", "Option 2", "Option 3"],
+  "Data Type": {
+    options: ["KML Collection", "CSV Collection"],
     order: 2,
-    tooltip: "Description of filter group 2 options",
+    tooltip: "Filter by data format type",
   },
-  "Filter Group 3": {
-    options: ["Option 1"],
+  Source: {
+    options: [
+      "tomdilts",
+      "University of Tennessee",
+      "US Census Bureau",
+      "California Department of Forestry and Fire Protection",
+      "NOAA",
+      "UNESCO",
+    ],
     order: 3,
-    tooltip: "Description of filter group 3 options",
+    tooltip: "Filter by the source or provider of the dataset",
   },
-  "Filter Group 4": {
-    options: ["Option 1", "Option 2"],
+  Tags: {
+    options: [
+      "forest",
+      "tree",
+      "mortality",
+      "Lake Tahoe",
+      "center",
+      "population",
+      "counties",
+      "demographics",
+      "wildfire",
+      "boundaries",
+      "precipitation",
+      "heritage",
+      "landmarks",
+    ],
     order: 4,
-    tooltip: "Description of filter group 4 options",
-  },
-  "Filter Group 5": {
-    options: ["Option 1", "Option 2", "Option 3"],
-    order: 5,
-    tooltip: "Description of filter group 5 options",
-  },
-  "Filter Group 6": {
-    options: ["Option 1", "Option 2", "Option 3", "Option 4"],
-    order: 6,
-    tooltip: "Description of filter group 6 options",
-  },
-  "Filter Group 7": {
-    options: ["Option 1", "Option 2", "Option 3"],
-    order: 7,
-    tooltip: "Description of filter group 7 options",
-  },
-  "Filter Group 8": {
-    options: ["Option 1", "Option 2"],
-    order: 8,
-    tooltip: "Description of filter group 8 options",
-  },
-  "Filter Group 9": {
-    options: ["Option 1", "Option 2"],
-    order: 9,
-    tooltip: "Description of filter group 9 options",
-  },
-  "Filter Group 10": {
-    options: [
-      "Option 1",
-      "Option 2",
-      "Option 3",
-      "Option 4",
-      "Option 5",
-      "Option 6",
-      "Option 7",
-    ],
-    order: 10,
-    tooltip: "Description of filter group 10 options",
-  },
-  "Filter Group 11": {
-    options: [
-      "Option 1",
-      "Option 2",
-      "Option 3",
-      "Option 4",
-      "Option 5",
-      "Option 6",
-      "Option 7",
-    ],
-    order: 11,
-    tooltip: "Description of filter group 11 options",
+    tooltip: "Filter by specific tags or keywords",
   },
 };
 
-// Helper function to match filters with dataset specifications
+// Mapping configuration for filter categories to dataset properties
+const filterMappings = {
+  "Community Action Areas": {
+    field: "type",
+    // Direct comparison
+  },
+  "Data Type": {
+    field: "dataFormat",
+    // Direct comparison
+  },
+  Source: {
+    field: "source",
+    // Direct comparison
+  },
+  Tags: {
+    field: "tags",
+    isArray: true,
+  },
+};
+
+// Simplified matchesFilter function
 export const matchesFilter = (dataset, category, value) => {
-  switch (category) {
-    case "Filter Group 1":
-      return dataset.specifications["Dataset Type"] === value;
+  // Get the mapping config for this category
+  const mappingConfig = filterMappings[category];
+  if (!mappingConfig) return false;
 
-    case "Filter Group 2":
-      return dataset.specifications["Data Format"] === value;
+  // Get the field to check in the dataset
+  const { field, isArray } = mappingConfig;
 
-    case "Filter Group 3":
-      return dataset.specifications["Source Type"] === value;
-
-    case "Filter Group 4":
-      // Map UI values to spec values
-      const sourceTypeMap = {
-        "Option 1": "Hospital Network",
-        "Option 2": "Government Agency",
-      };
-      return dataset.specifications["Source Type"] === sourceTypeMap[value];
-
-    case "Filter Group 5":
-      return dataset.specifications["Record Count"] === value;
-
-    case "Filter Group 6":
-      if (value === "Option 1") {
-        return dataset.specifications["Dataset Size"][0] === "1.5GB";
-      }
-      if (value === "Option 2") {
-        return dataset.specifications["Dataset Size"][0] === "500MB";
-      }
-      if (value === "Option 3") {
-        return dataset.specifications["Dataset Size"][0] === "750MB";
-      }
-      if (value === "Option 4") {
-        return dataset.specifications["Dataset Size"][0] === "300MB";
-      }
-      return false;
-
-    case "Filter Group 7":
-      if (value === "Option 1") {
-        return dataset.specifications["Time Period"][0] === "2018-2020";
-      }
-      if (value === "Option 2") {
-        return dataset.specifications["Time Period"][0] === "2019-2021";
-      }
-      if (value === "Option 3") {
-        return dataset.specifications["Time Period"][0] === "2020-2022";
-      }
-      return false;
-
-    case "Filter Group 8":
-      // Check either Dataset Characteristics or Pattern
-      if (value === "Option 1") {
-        return dataset.specifications["Dataset Type"] === "Clinical";
-      }
-      if (value === "Option 2") {
-        return dataset.specifications["Dataset Type"] === "Survey";
-      }
-      return false;
-
-    case "Filter Group 9":
-    case "Filter Group 10":
-    case "Filter Group 11":
-      return dataset.specifications["Certification"]?.includes(value);
-
-    default:
-      return false;
+  // Handle missing fields
+  if (dataset[field] === undefined) {
+    return false;
   }
+
+  // Handle array fields (tags)
+  if (isArray) {
+    const fieldArray = Array.isArray(dataset[field])
+      ? dataset[field]
+      : [dataset[field]];
+    return fieldArray.some((item) =>
+      item.toLowerCase().includes(value.toLowerCase())
+    );
+  }
+
+  // Standard field comparison
+  return dataset[field] === value;
 };
 
 // Tooltip Popup Component
 const TooltipPopup = ({ content, title, onClose, position }) => {
   return ReactDOM.createPortal(
-    <div className="tooltip-overlay" onClick={onClose}>
+    <div
+      className="tooltip-overlay"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={`tooltip-title-${title.replace(/\s+/g, "-")}`}
+    >
       <div
         className="tooltip-popup"
         onClick={(e) => e.stopPropagation()}
@@ -162,8 +122,12 @@ const TooltipPopup = ({ content, title, onClose, position }) => {
         }}
       >
         <div className="tooltip-header">
-          <h3>{title}</h3>
-          <button className="tooltip-close" onClick={onClose}>
+          <h3 id={`tooltip-title-${title.replace(/\s+/g, "-")}`}>{title}</h3>
+          <button
+            className="tooltip-close"
+            onClick={onClose}
+            aria-label="Close tooltip"
+          >
             ×
           </button>
         </div>
@@ -188,6 +152,7 @@ const FilterSection = ({
   const [isExpanded, setIsExpanded] = useState(true);
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
   const tooltipButtonRef = useRef(null);
+  const sectionId = `section-content-${title.replace(/\s+/g, "")}`;
 
   const allSelected = React.useMemo(() => {
     if (!activeFilters?.[title]) return false;
@@ -239,11 +204,23 @@ const FilterSection = ({
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      setIsExpanded(!isExpanded);
+    }
+  };
+
   return (
     <div className="filter-section">
       <div
         className="filter-section-header"
         onClick={() => setIsExpanded(!isExpanded)}
+        onKeyDown={handleKeyDown}
+        tabIndex="0"
+        role="button"
+        aria-expanded={isExpanded}
+        aria-controls={sectionId}
       >
         <div className="filter-section-title">
           <span className={`expand-icon ${isExpanded ? "expanded" : ""}`}>
@@ -254,6 +231,7 @@ const FilterSection = ({
             checked={allSelected}
             onChange={handleHeaderCheckboxChange}
             onClick={(e) => e.stopPropagation()}
+            aria-label={`Select all ${title} options`}
           />
           <h3>{title}</h3>
         </div>
@@ -262,13 +240,17 @@ const FilterSection = ({
             ref={tooltipButtonRef}
             className="filter-tooltip"
             onClick={handleTooltipClick}
-            aria-label="Show more information"
+            aria-label={`Show more information about ${title}`}
           >
             ?
           </button>
         )}
       </div>
-      <div className={`filter-section-content ${isExpanded ? "expanded" : ""}`}>
+      <div
+        className={`filter-section-content ${isExpanded ? "expanded" : ""}`}
+        id={sectionId}
+        aria-hidden={!isExpanded}
+      >
         {children}
       </div>
       {showTooltip && tooltip && (
@@ -331,6 +313,7 @@ const DatasetFilters = ({ onFilterChange, activeFilters }) => {
                   id={`${category}-${option}`}
                   checked={activeFilters?.[category]?.[option] || false}
                   onChange={() => handleFilterChange(category, option)}
+                  aria-label={`${category}: ${option}`}
                 />
                 <label htmlFor={`${category}-${option}`}>{option}</label>
               </div>
@@ -341,7 +324,7 @@ const DatasetFilters = ({ onFilterChange, activeFilters }) => {
   };
 
   return (
-    <div className="hdc-filters">
+    <div className="hdc-filters" role="region" aria-label="Dataset filters">
       <div className="filter-header">
         <div className="filter-count">
           <span>Filter By</span>
@@ -349,6 +332,8 @@ const DatasetFilters = ({ onFilterChange, activeFilters }) => {
             className={`filter-badge ${
               activeFilterCount === 0 ? "filter-badge-hidden" : ""
             }`}
+            aria-live="polite"
+            aria-atomic="true"
           >
             {activeFilterCount || ""}
           </span>
@@ -358,6 +343,8 @@ const DatasetFilters = ({ onFilterChange, activeFilters }) => {
           className={`clear-filters ${
             activeFilterCount === 0 ? "clear-filters-hidden" : ""
           }`}
+          aria-label="Clear all filters"
+          tabIndex={activeFilterCount === 0 ? "-1" : "0"}
         >
           Clear
         </button>
