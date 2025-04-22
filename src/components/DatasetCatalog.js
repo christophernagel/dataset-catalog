@@ -373,7 +373,17 @@ const DatasetCatalog = () => {
         </div>
 
         <div className="hdc-catalog-content">
-          <div className="hdc-catalog-header">
+          {/* Remove the catalog header entirely */}
+
+          <ActiveFiltersBar
+            filters={activeFilters}
+            onRemoveFilter={handleRemoveFilter}
+            onSearch={handleSearch}
+            searchQuery={searchQuery}
+          />
+
+          {/* New control bar that contains both results count and view controls */}
+          <div className="hdc-controls-bar">
             <div className="hdc-results-info">
               {filterDatasets().length} of {sampleDatasets.length} datasets
             </div>
@@ -385,13 +395,6 @@ const DatasetCatalog = () => {
               onSortChange={handleSortChange}
             />
           </div>
-
-          <ActiveFiltersBar
-            filters={activeFilters}
-            onRemoveFilter={handleRemoveFilter}
-            onSearch={handleSearch}
-            searchQuery={searchQuery}
-          />
 
           <DatasetGrid
             datasets={filterDatasets()}

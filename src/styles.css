@@ -196,6 +196,9 @@ body .hdc-dataset-catalog .hdc-search-input::placeholder,
     width: 100%;
     margin-top: 8px;
   }
+  .hdc-view-controls-container {
+    justify-content: space-between;
+  }
 }
 
 /* Custom tooltip for long Community Action Area names */
@@ -360,7 +363,15 @@ body .hdc-dataset-catalog .hdc-search-input::placeholder,
   background-color: #f9fafb; /* Optional: light background to distinguish from other elements */
   border-radius: 4px;
 }
-
+.hdc-controls-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border-top: 1px solid #e5e7eb;
+  background-color: white;
+}
 .hdc-results-info {
   font-size: 0.9rem;
   color: #6b7280;
@@ -394,6 +405,11 @@ body .hdc-dataset-catalog .hdc-search-input::placeholder,
 .hdc-display-controls {
   display: flex;
   gap: 4px;
+}
+
+.hdc-results-info {
+  font-size: 0.9rem;
+  color: #6b7280;
 }
 
 .hdc-view-button {
@@ -477,6 +493,16 @@ body .hdc-dataset-catalog .hdc-search-input::placeholder,
 }
 
 @media (max-width: 768px) {
+  .hdc-controls-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .hdc-view-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
   .datasets-grid {
     grid-template-columns: 1fr;
   }
@@ -1430,6 +1456,14 @@ body .hdc-dataset-catalog .hdc-search-input::placeholder,
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
+  }
+  .hdc-view-controls-container {
+    display: flex;
+    justify-content: flex-end;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    background-color: #f9fafb;
+    border-radius: 4px;
   }
 
   .hdc-view-controls {
